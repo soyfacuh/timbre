@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tocar timbre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Karla:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noche: #0f1b2b;
+    --noche-suave: #16263b;
+    --luz: #e8a33d;
+    --luz-suave: #f4c877;
+    --texto: #f2ece0;
+    --texto-tenue: #9fb0c2;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    background: radial-gradient(circle at 50% 30%, var(--noche-suave), var(--noche) 70%);
+    color: var(--texto);
+    font-family: 'Karla', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: 32px 20px;
+    text-align: center;
+  }
+  h1 {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.5rem, 5vw, 2.1rem);
+    margin: 0 0 6px;
+  }
+  p.sub {
+    color: var(--texto-tenue);
+    margin: 0 0 48px;
+    font-size: 1rem;
+    max-width: 320px;
+  }
+  .boton {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: none;
+    background: radial-gradient(circle at 35% 30%, var(--luz-suave), var(--luz) 65%);
+    box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.12), 0 0 50px rgba(232, 163, 61, 0.35);
+    color: #241505;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.3s ease;
+    animation: respirar 3.2s ease-in-out infinite;
+  }
+  .boton:hover { transform: scale(1.03); }
+  .boton:active { transform: scale(0.97); }
+  .boton:disabled {
+    animation: none;
+    opacity: 0.55;
+    cursor: default;
+    box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.08);
+  }
+  @keyframes respirar {
+    0%, 100% { box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.12), 0 0 50px rgba(232, 163, 61, 0.35); }
+    50% { box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.2), 0 0 70px rgba(232, 163, 61, 0.5); }
+  }
+  #estado {
+    margin-top: 28px;
+    min-height: 1.4em;
+    color: var(--luz-suave);
+    font-size: 0.95rem;
+  }
+  .qr-toggle {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    color: var(--texto-tenue);
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0.6;
+  }
+  .qr-toggle:hover { opacity: 1; }
+  #qr-panel {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 27, 43, 0.96);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+  #qr-panel.abierto { display: flex; }
+  #qr-panel button.cerrar {
+    background: var(--luz);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: 'Karla', sans-serif;
+    cursor: pointer;
+  }
+  #qrcode { background: #fff; padding: 16px; border-radius: 12px; }
+</style>
+</head>
+<body>
+
+  <h1>Tocá el timbre</h1>
+  <p class="sub">Apretá el botón y le avisamos por WhatsApp a quien corresponda.</p>
+
+  <button class="boton" id="boton" onclick="tocarTimbre()">🔔<br>Timbre</button>
+  <div id="estado"></div>
+
+  <button class="qr-toggle" onclick="document.getElementById('qr-panel').classList.add('abierto')">código QR</button>
+  <div id="qr-panel">
+    <div id="qrcode"></div>
+    <p style="color:var(--texto-tenue); font-size:0.85rem; max-width:260px;">Imprimí esto y pegalo en la puerta.</p>
+    <button class="cerrar" onclick="document.getElementById('qr-panel').classList.remove('abierto')">Cerrar</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const contactos = [
+      { nombre: "Facundo", telefono: "5491158570938", apikey: "4926614" },
+      { nombre: "Mama", telefono: "5491133376247", apikey: "5069460" },
+      { nombre: "Gordo", telefono: "5491122404483", apikey: "8643597" },
+    ];
+    // ──────────────────────────────────────────────────────────────
+
+    const boton = document.getElementById("boton");
+    const estado = document.getElementById("estado");
+
+    async function tocarTimbre() {
+      boton.disabled = true;
+      estado.textContent = "Avisando…";
+
+      const mensaje = encodeURIComponent("🔔 Alguien está tocando el timbre");
+      const pedidos = contactos.map(c =>
+        fetch(`https://api.callmebot.com/whatsapp.php?phone=${c.telefono}&text=${mensaje}&apikey=${c.apikey}`, { mode: "no-cors" })
+      );
+
+      try {
+        await Promise.allSettled(pedidos);
+        estado.textContent = "¡Listo! Ya avisamos.";
+      } catch (e) {
+        estado.textContent = "Se avisó, pero revisá la consola si algo falló.";
+      }
+
+      setTimeout(() => {
+        boton.disabled = false;
+        estado.textContent = "";
+      }, 15000);
+    }
+
+    // Genera el QR apuntando a esta misma página, para imprimir
+    new QRCode(document.getElementById("qrcode"), {
+      text: window.location.href,
+      width: 200,
+      height: 200,
+    });
+  </script>
+</body>
+</html>
