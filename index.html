@@ -14,12 +14,11 @@
     --luz-suave: #f4c877;
     --texto: #f2ece0;
     --texto-tenue: #9fb0c2;
+    --panel: #1c2e46;
+    --linea: rgba(159, 176, 194, 0.18);
   }
   * { box-sizing: border-box; }
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
+  html, body { height: 100%; margin: 0; }
   body {
     background: radial-gradient(circle at 50% 30%, var(--noche-suave), var(--noche) 70%);
     color: var(--texto);
@@ -27,103 +26,282 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-height: 100%;
-    padding: 32px 20px;
+    padding: 32px 20px 90px;
     text-align: center;
   }
   h1 {
     font-family: 'Fredoka', sans-serif;
     font-weight: 600;
     font-size: clamp(1.5rem, 5vw, 2.1rem);
-    margin: 0 0 6px;
+    margin: 24px 0 6px;
   }
   p.sub {
     color: var(--texto-tenue);
-    margin: 0 0 48px;
+    margin: 0 0 28px;
     font-size: 1rem;
     max-width: 320px;
   }
-  .boton {
-    width: 180px;
-    height: 180px;
+
+  /* Nombre */
+  .campo-nombre {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 22px;
+  }
+  .campo-nombre input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--texto);
+    font-family: 'Karla', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    text-align: center;
+  }
+  .campo-nombre input::placeholder { color: var(--texto-tenue); }
+  .campo-nombre input:focus { border-color: var(--luz); }
+
+  /* Selector de destinatarios */
+  .bloque {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 26px;
+  }
+  .bloque-titulo {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    margin-bottom: 10px;
+  }
+  .destinatarios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .destinatarios label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .destinatarios label:has(input:checked) {
+    border-color: var(--luz);
+    background: rgba(232, 163, 61, 0.12);
+  }
+  .destinatarios input { accent-color: var(--luz); }
+
+  /* Botones de motivo */
+  .motivos {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .motivo-boton {
+    width: 128px;
+    height: 128px;
     border-radius: 50%;
     border: none;
     background: radial-gradient(circle at 35% 30%, var(--luz-suave), var(--luz) 65%);
-    box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.12), 0 0 50px rgba(232, 163, 61, 0.35);
+    box-shadow: 0 0 0 6px rgba(232, 163, 61, 0.12), 0 0 40px rgba(232, 163, 61, 0.3);
     color: #241505;
     font-family: 'Fredoka', sans-serif;
     font-weight: 600;
-    font-size: 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.3;
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.3s ease;
     animation: respirar 3.2s ease-in-out infinite;
   }
-  .boton:hover { transform: scale(1.03); }
-  .boton:active { transform: scale(0.97); }
-  .boton:disabled {
+  .motivo-boton .emoji {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 4px;
+    border-radius: 50%;
+    background: var(--noche);
+    box-shadow: inset 0 0 0 2px rgba(15, 27, 43, 0.4);
+  }
+  .motivo-boton:hover { transform: scale(1.04); }
+  .motivo-boton:active { transform: scale(0.96); }
+  .motivo-boton:disabled {
     animation: none;
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: default;
-    box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.08);
+    box-shadow: 0 0 0 6px rgba(232, 163, 61, 0.08);
   }
   @keyframes respirar {
-    0%, 100% { box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.12), 0 0 50px rgba(232, 163, 61, 0.35); }
-    50% { box-shadow: 0 0 0 8px rgba(232, 163, 61, 0.2), 0 0 70px rgba(232, 163, 61, 0.5); }
+    0%, 100% { box-shadow: 0 0 0 6px rgba(232, 163, 61, 0.12), 0 0 40px rgba(232, 163, 61, 0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(232, 163, 61, 0.2), 0 0 58px rgba(232, 163, 61, 0.45); }
   }
+
   #estado {
-    margin-top: 28px;
-    min-height: 1.4em;
+    margin-top: 26px;
+    min-height: 2.4em;
     color: var(--luz-suave);
     font-size: 0.95rem;
+    max-width: 300px;
   }
-  .qr-toggle {
+
+  .modo-prueba-aviso {
+    margin-top: 6px;
+    font-size: 0.78rem;
+    color: var(--luz-suave);
+    background: rgba(232, 163, 61, 0.1);
+    border: 1px solid rgba(232, 163, 61, 0.3);
+    border-radius: 999px;
+    padding: 5px 12px;
+    display: none;
+  }
+  .modo-prueba-aviso.activo { display: inline-block; }
+
+  /* Botones flotantes inferiores */
+  .barra-inferior {
     position: fixed;
-    bottom: 18px;
-    right: 18px;
-    background: none;
-    border: none;
-    color: var(--texto-tenue);
-    font-size: 0.8rem;
-    cursor: pointer;
-    opacity: 0.6;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 14px;
   }
-  .qr-toggle:hover { opacity: 1; }
-  #qr-panel {
+  .mini-boton {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--linea);
+    color: var(--texto-tenue);
+    font-size: 0.75rem;
+    padding: 7px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .mini-boton:hover { opacity: 1; color: var(--texto); }
+  .mini-boton.encendido {
+    color: var(--luz-suave);
+    border-color: var(--luz);
+    background: rgba(232, 163, 61, 0.1);
+  }
+
+  /* Paneles (QR / historial) */
+  .panel {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(15, 27, 43, 0.96);
+    background: rgba(15, 27, 43, 0.97);
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 16px;
+    padding: 24px;
+    z-index: 10;
   }
-  #qr-panel.abierto { display: flex; }
-  #qr-panel button.cerrar {
+  .panel.abierto { display: flex; }
+  .panel button.cerrar {
     background: var(--luz);
     border: none;
     border-radius: 8px;
     padding: 8px 18px;
     font-family: 'Karla', sans-serif;
+    font-weight: 500;
     cursor: pointer;
   }
   #qrcode { background: #fff; padding: 16px; border-radius: 12px; }
+
+  #historial-lista {
+    width: 100%;
+    max-width: 340px;
+    max-height: 50vh;
+    overflow-y: auto;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .historial-item {
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  .historial-item .fila-1 { display: flex; justify-content: space-between; gap: 8px; font-weight: 500; }
+  .historial-item .prueba-tag {
+    font-size: 0.68rem;
+    color: var(--luz-suave);
+    background: rgba(232, 163, 61, 0.15);
+    border-radius: 999px;
+    padding: 1px 8px;
+  }
+  .historial-item .fecha { color: var(--texto-tenue); font-size: 0.75rem; margin-top: 3px; }
+  .historial-vacio { color: var(--texto-tenue); font-size: 0.85rem; }
+  .vaciar-historial {
+    background: none;
+    border: 1px solid var(--linea);
+    color: var(--texto-tenue);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
 
   <h1>Tocá el timbre</h1>
-  <p class="sub">Apretá el botón y le avisamos por WhatsApp a quien corresponda.</p>
+  <p class="sub">Escribí tu nombre, elegí el motivo y le avisamos por WhatsApp a quien corresponda.</p>
 
-  <button class="boton" id="boton" onclick="tocarTimbre()">🔔<br>Timbre</button>
+  <div class="campo-nombre">
+    <input type="text" id="nombre" placeholder="Tu nombre (opcional)" maxlength="40">
+  </div>
+
+  <div class="bloque">
+    <div class="bloque-titulo">Avisar a</div>
+    <div class="destinatarios" id="destinatarios"></div>
+  </div>
+
+  <div class="bloque">
+    <div class="bloque-titulo">Motivo de la visita</div>
+    <div class="motivos" id="motivos"></div>
+  </div>
+
   <div id="estado"></div>
+  <div class="modo-prueba-aviso" id="aviso-prueba">🧪 Modo prueba activo: no se envía nada real</div>
 
-  <button class="qr-toggle" onclick="document.getElementById('qr-panel').classList.add('abierto')">código QR</button>
-  <div id="qr-panel">
+  <div class="barra-inferior">
+    <button class="mini-boton" id="btn-prueba" onclick="alternarModoPrueba()">modo prueba</button>
+    <button class="mini-boton" onclick="abrirHistorial()">historial</button>
+    <button class="mini-boton" onclick="document.getElementById('qr-panel').classList.add('abierto')">código QR</button>
+  </div>
+
+  <div id="qr-panel" class="panel">
     <div id="qrcode"></div>
     <p style="color:var(--texto-tenue); font-size:0.85rem; max-width:260px;">Imprimí esto y pegalo en la puerta.</p>
     <button class="cerrar" onclick="document.getElementById('qr-panel').classList.remove('abierto')">Cerrar</button>
+  </div>
+
+  <div id="historial-panel" class="panel">
+    <div class="bloque-titulo" style="margin-bottom:0;">Historial de timbres</div>
+    <div id="historial-lista"></div>
+    <div style="display:flex; gap:10px;">
+      <button class="vaciar-historial" onclick="vaciarHistorial()">Vaciar historial</button>
+      <button class="cerrar" onclick="document.getElementById('historial-panel').classList.remove('abierto')">Cerrar</button>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -133,31 +311,155 @@
       { nombre: "Mama", telefono: "5491133376247", apikey: "5069460" },
       { nombre: "Gordo", telefono: "5491122404483", apikey: "8643597" },
     ];
-    // ──────────────────────────────────────────────────────────────
 
-    const boton = document.getElementById("boton");
+    const motivos = [
+      { id: "visita", emoji: "🔔", label: "Visita", texto: "está en la puerta" },
+      { id: "delivery", emoji: "📦", label: "Delivery", texto: "trajo un delivery" },
+    ];
+
+    const CLAVE_HISTORIAL = "timbre_historial";
     const estado = document.getElementById("estado");
+    const avisoPrueba = document.getElementById("aviso-prueba");
+    const btnPrueba = document.getElementById("btn-prueba");
 
-    async function tocarTimbre() {
-      boton.disabled = true;
-      estado.textContent = "Avisando…";
+    // ── Modo prueba (toggle manual o ?test=1 en la URL) ──
+    let modoPrueba = new URLSearchParams(window.location.search).get("test") === "1";
 
-      const mensaje = encodeURIComponent("🔔 Alguien está tocando el timbre");
-      const pedidos = contactos.map(c =>
-        fetch(`https://api.callmebot.com/whatsapp.php?phone=${c.telefono}&text=${mensaje}&apikey=${c.apikey}`, { mode: "no-cors" })
-      );
+    function actualizarUIModoPrueba() {
+      avisoPrueba.classList.toggle("activo", modoPrueba);
+      btnPrueba.classList.toggle("encendido", modoPrueba);
+      btnPrueba.textContent = modoPrueba ? "modo prueba: ON" : "modo prueba";
+    }
+    function alternarModoPrueba() {
+      modoPrueba = !modoPrueba;
+      actualizarUIModoPrueba();
+    }
+    actualizarUIModoPrueba();
 
+    // ── Render de checkboxes de destinatarios (todos tildados por defecto) ──
+    const contDestinatarios = document.getElementById("destinatarios");
+    contactos.forEach((c, i) => {
+      const label = document.createElement("label");
+      label.innerHTML = `<input type="checkbox" value="${i}" checked> ${c.nombre}`;
+      contDestinatarios.appendChild(label);
+    });
+    function destinatariosSeleccionados() {
+      return [...contDestinatarios.querySelectorAll("input:checked")].map(el => contactos[+el.value]);
+    }
+
+    // ── Render de botones de motivo ──
+    const contMotivos = document.getElementById("motivos");
+    const botonesMotivo = [];
+    motivos.forEach(m => {
+      const btn = document.createElement("button");
+      btn.className = "motivo-boton";
+      btn.innerHTML = `<span class="emoji">${m.emoji}</span>${m.label}`;
+      btn.onclick = () => tocarTimbre(m);
+      contMotivos.appendChild(btn);
+      botonesMotivo.push(btn);
+    });
+
+    // ── Sonido de timbre (Web Audio, sin archivos externos) ──
+    function reproducirSonido() {
       try {
-        await Promise.allSettled(pedidos);
-        estado.textContent = "¡Listo! Ya avisamos.";
-      } catch (e) {
-        estado.textContent = "Se avisó, pero revisá la consola si algo falló.";
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const notas = [660, 880];
+        notas.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          const inicio = ctx.currentTime + i * 0.16;
+          gain.gain.setValueAtTime(0, inicio);
+          gain.gain.linearRampToValueAtTime(0.2, inicio + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, inicio + 0.35);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(inicio);
+          osc.stop(inicio + 0.4);
+        });
+      } catch (e) { /* el navegador puede bloquear audio sin interacción previa, no pasa nada */ }
+    }
+
+    // ── Historial (guardado en el navegador) ──
+    function leerHistorial() {
+      try { return JSON.parse(localStorage.getItem(CLAVE_HISTORIAL)) || []; }
+      catch (e) { return []; }
+    }
+    function guardarEnHistorial(registro) {
+      const h = leerHistorial();
+      h.unshift(registro);
+      localStorage.setItem(CLAVE_HISTORIAL, JSON.stringify(h.slice(0, 100)));
+    }
+    function vaciarHistorial() {
+      localStorage.removeItem(CLAVE_HISTORIAL);
+      renderHistorial();
+    }
+    function renderHistorial() {
+      const lista = document.getElementById("historial-lista");
+      const h = leerHistorial();
+      if (h.length === 0) {
+        lista.innerHTML = `<div class="historial-vacio">Todavía no tocaron el timbre.</div>`;
+        return;
+      }
+      lista.innerHTML = h.map(r => `
+        <div class="historial-item">
+          <div class="fila-1">
+            <span>${r.nombre || "Sin nombre"} · ${r.motivoLabel}</span>
+            ${r.prueba ? '<span class="prueba-tag">prueba</span>' : ""}
+          </div>
+          <div class="fecha">${r.fecha} · avisado a: ${r.destinatarios.join(", ") || "nadie"}</div>
+        </div>
+      `).join("");
+    }
+    function abrirHistorial() {
+      renderHistorial();
+      document.getElementById("historial-panel").classList.add("abierto");
+    }
+
+    // ── Acción principal: tocar el timbre ──
+    async function tocarTimbre(motivo) {
+      const destinatarios = destinatariosSeleccionados();
+      if (destinatarios.length === 0) {
+        estado.textContent = "Elegí al menos a quién avisar.";
+        return;
       }
 
+      botonesMotivo.forEach(b => b.disabled = true);
+      reproducirSonido();
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const quien = nombre ? nombre : "Alguien";
+      const mensaje = encodeURIComponent(`🔔 ${quien} ${motivo.texto}`);
+
+      estado.textContent = modoPrueba
+        ? "🧪 Simulando envío… (modo prueba, no se manda nada real)"
+        : "Avisando… puede tardar unos minutos en llegar por WhatsApp 🕒";
+
+      if (modoPrueba) {
+        await new Promise(res => setTimeout(res, 900));
+      } else {
+        const pedidos = destinatarios.map(c =>
+          fetch(`https://api.callmebot.com/whatsapp.php?phone=${c.telefono}&text=${mensaje}&apikey=${c.apikey}`, { mode: "no-cors" })
+        );
+        try { await Promise.allSettled(pedidos); } catch (e) { /* seguimos igual */ }
+      }
+
+      guardarEnHistorial({
+        nombre,
+        motivoLabel: motivo.label,
+        destinatarios: destinatarios.map(c => c.nombre),
+        fecha: new Date().toLocaleString("es-AR"),
+        prueba: modoPrueba,
+      });
+
+      estado.textContent = modoPrueba
+        ? "✅ Prueba completa (no se envió nada real)."
+        : `✅ ¡Listo! Le avisamos a ${destinatarios.map(c => c.nombre).join(", ")}. Puede tardar unos minutos en llegar.`;
+
       setTimeout(() => {
-        boton.disabled = false;
+        botonesMotivo.forEach(b => b.disabled = false);
         estado.textContent = "";
-      }, 15000);
+      }, 8000);
     }
 
     // Genera el QR apuntando a esta misma página, para imprimir
